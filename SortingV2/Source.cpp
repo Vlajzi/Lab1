@@ -13,6 +13,22 @@ using namespace Algoritmi;
 
 void Racun(void (*sortiranje)(short*, int), int count);
 
+
+/*template<typename TimeT = std::chrono::milliseconds>
+struct measure
+{
+	template<typename F, typename ...Args>
+	static typename TimeT::rep execution(F&& func, Args&& ... args)
+	{
+		auto start = std::chrono::steady_clock::now();
+		std::forward<decltype(func)>(func)(std::forward<Args>(args)...);
+		auto duration = std::chrono::duration_cast<TimeT>
+			(std::chrono::steady_clock::now() - start);
+		return duration.count();
+	}
+};*/
+
+
 int main(int argc, char* argv[])
 {
 
@@ -31,7 +47,7 @@ int main(int argc, char* argv[])
 
 	}*/
 	cout << "BucketSortLS" << endl;
-	Racun(BucketSort, 1000000);
+	Racun(BucketSort, 100000000);
 
 
 	cin.ignore();
@@ -53,11 +69,22 @@ void Racun(void (*sortiranje)(short*, int), int count)
 	//n1->Printf();
 	//time
 	//steady_clock::time_point t1 = steady_clock::now();
+	
 	high_resolution_clock::time_point t1 = high_resolution_clock::now();
+	system_clock::time_point begin = system_clock::now();
+
+	
+
+	
+	//cout << "Time: " << measure<>::execution(n1->Sort()) << endl;
 	n1->Sort();
 	high_resolution_clock::time_point t2 = high_resolution_clock::now();
-	//steady_clock::time_point t2 = steady_clock::now();
+	system_clock::time_point end = system_clock::now();
 
+	//double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+	//PULONG64 vreme = new ULONG64();
+	//QueryProcessCycleTime(GetCurrentProcess(), vreme);
+	//steady_clock::time_point t2 = steady_clock::now();
 
 	PROCESS_MEMORY_COUNTERS_EX pmc;
 	GetProcessMemoryInfo(GetCurrentProcess(), (PPROCESS_MEMORY_COUNTERS)& pmc, sizeof(pmc));
@@ -67,11 +94,13 @@ void Racun(void (*sortiranje)(short*, int), int count)
 	int test = GetProcessMemoryInfo(GetCurrentProcess(), proMem,	sizeof(PROCESS_MEMORY_COUNTERS));
 	cout << "Peak Mem Usage: " << proMem->PeakWorkingSetSize/1000 << "KB" << endl;
 	//time
-	n1->Printf();
-
+	//n1->Printf();
+	//cout << vreme << endl;
 	auto duration = duration_cast<chrono::microseconds>(t2 - t1).count();
-
-	cout << duration << endl << "--KRAJ--" << endl;
+	//std::chrono::duration<double, std::milli> fp_ms = t2 - t1;
+	std::chrono::duration<double> elapsed_seconds = end - begin;
+	cout << elapsed_seconds.count() << endl;
+	cout << duration  << endl << "--KRAJ--" << endl;
 }
 
 
